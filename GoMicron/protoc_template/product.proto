@@ -1,0 +1,13 @@
+syntax="proto3";
+
+option go_package = "protoc";
+
+message Product {
+    int64 id = 1;
+    string name = 2;
+    string description = 3;
+    float price = 4;
+    string sku = 5;
+
+};
+

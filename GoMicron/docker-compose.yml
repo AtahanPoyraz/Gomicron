@@ -1,0 +1,29 @@
+version: '3'
+services:
+  mysql-db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: LIBRARY
+      MYSQL_USER: db_user
+      MYSQL_PASSWORD: db_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+  
+  postgres-db:
+    image: postgres:latest
+    environment:
+      - DB_USER=postgres
+      - DB_PASSWORD=password
+      - DB_NAME=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pq-data:/var/lib/postgresql
+volumes:
+  mysql-data:
+  pq-data:
+
+#docker-compose exec mysql-db mysql --user=db_user --password=db_password

@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@700&family=Poppins:wght@400;500;600&display=swap');
+body{
+    font-family: 'Noto Sans', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: url('../assets/bg/cloud.jpg') center;
+    background-size: cover;
+    margin: 0;}
+.gomicronimg,
+.gomicron{
+    margin-top: -20px;
+    font-size: 35px;
+    color: #ffffff;
+    text-shadow: 0 0 20px rgba(0, 24, 43, 0.071);}
+.maincontainer{
+    animation: fadeIn 1.5s;
+    font-family: 'Noto Sans', sans-serif;
+    display: grid;
+    place-items: center;
+    background-color: #3C9CCE;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(1, 57, 103, 0.25);
+    padding: 25px;
+    max-width: 350px;
+    height: 385px;
+    text-align: center;}
+.mailbox,
+.passbox{
+    display: block;
+    width: 150%;
+    padding: 10px;
+    margin-bottom: 30px;
+    box-sizing: border-box;
+    border: 0px solid #ccc;
+    border-radius: 5px;
+    height: 25px;}
+input[type="email"] ,
+input[type="password"] {
+    box-shadow: 0 0 20px rgba(1, 57, 103, 0.039);
+    transition: border-color 0.3s ease; 
+    padding: 10px; 
+    border: 3px solid #81ccf4b7;
+    border-radius: 5px;
+    font-size: 15px;
+    color: #0e4768b7;
+    width: 250px;
+    font-weight: 700;
+    outline: none;
+    background-color: #fbfbfb;}
+input[type="email"]:focus,
+input[type="password"]:focus {
+    border: 3px solid #0e4768b7;}
+.mail,
+.pass{
+    text-shadow: 0 0 20px rgba(1, 57, 103, 0.039);
+    padding: 10px;
+    font-size: 12px;
+    color: #ffffff;}
+.pass{
+    margin-right: 210px;}
+.mail{
+    margin-right: 233px;}
+.button1{
+    font-family: 'Noto Sans', sans-serif;
+    box-shadow: 0 0 20px rgba(1, 57, 103, 0.039);
+    margin-top: 30px;
+    transition: background-color 0.3s ease;
+    background-color: #0077fe;
+    color: #ffffff;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 15px;
+    width: 220px;}
+.button1:hover{
+    background-color: #0357b8;}
+@keyframes fadeIn{
+    from{
+        opacity: 0.1;
+        transform: translateY(-20px); 
+    }
+    to{
+        opacity: 1;
+        transform: translateY(0);}}

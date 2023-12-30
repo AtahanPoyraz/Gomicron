@@ -1,0 +1,10 @@
+syntax="proto3";
+
+option go_package = "protoc";
+
+message Student {
+    int64 id = 1;
+    string name = 2;
+    string surname = 3;
+    string note = 4;
+}

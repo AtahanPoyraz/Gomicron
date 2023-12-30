@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gomicron UI</title>
+    <link rel="stylesheet" href="../css/main.css">
+    <script src="../js/main.js"></script>
+    <link rel="icon" href="../assets/logo/Gomicron.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="../assets/logo/Gomicron.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="maincontainer">
+        <a href="https://www.formdata.com.tr/" target="_blank">
+            <img class="gomicronimg" src="../assets/logo/Gomicron.jpg" alt="Gomicron Logo" style="width: 35%; height: 35%;">
+        </a>
+        <h1 class="gomicron">Gomicron UI</h1>
+        <div class="loginbox">
+            <form id="login-form">
+                <label class="mail">Email</label>
+                <input type="email" id="email-input" required>
+                <span></span>
+                <label class="pass">Password</label>
+                <input type="password" id="password-input" required>
+                <span></span>
+                <button type="button" id="submit-button" class="button1" onclick="submitForm()">
+                    <span></span>
+                    <label>SUBMIT</label>
+                </button>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var user_email = document.getElementById('email-input');
+            var user_password = document.getElementById('password-input');
+            var submit_button = document.getElementById('submit-button');
+            function submitForm() {
+                event.preventDefault(); 
+                var data = {
+                email: user_email.value,
+                password: user_password.value
+                };
+                var baseUrl = 'http://' + window.location.hostname + ':' + window.location.port;
+                fetch(baseUrl + '/gomicron/backend/user/auth/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        alert("Incorrect email or password. Please try again.");
+                        throw new Error("Authentication unsuccessful");
+                    }
+                })
+                .then(data => {
+                    console.log(data);
+                    document.cookie = `G0M1CR0N4UTHK3Y=${data.token}; expires=Thu, 01 Jan 2030 00:00:00 UTC; path=/`;
+                    window.location.href = '/dashboard/';
+                })
+                .catch((error) => {
+                    alert("Incorrect email or password. Please try again.");
+                    throw new Error("Authentication unsuccessful");
+                });
+            }
+    
+            submit_button.addEventListener("click", submitForm);
+    
+            user_email.addEventListener("keypress", function(event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    submitForm();
+                }
+            });
+    
+            user_password.addEventListener("keypress", function(event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    submitForm();
+                }
+            });
+        });
+    </script>    
+</body>
+</html>
