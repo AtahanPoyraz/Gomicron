@@ -18,6 +18,7 @@ func HandleAuthMiddleware(next http.Handler) http.Handler {
 
 		if !isAuthenticated {
 			http.Error(w, "Authentication Failure", http.StatusUnauthorized)
+			//http.Redirect(w, r, "/", http.StatusUnauthorized)
 			return
 		}
 

@@ -2,7 +2,7 @@ version: "ALPHA 0.0.1"
 #------------[ SERVER ]------------#
 server:
   host         : "localhost"
-  port         : 4040
+  port         : 9876
   idletimeout  : 120
   readtimeout  : 1
   writetimeout : 1

@@ -15,7 +15,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-
 type Students struct {
 	l *log.Logger
 }

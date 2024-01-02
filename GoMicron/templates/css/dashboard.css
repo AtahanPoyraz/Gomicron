@@ -1,23 +1,33 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@700&family=Poppins:wght@400;500;600&display=swap');
 body {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    padding: 15px;
+    justify-content: flex-start;
+    align-items: center; 
+    height: 96.5vh;
     font-family: 'Noto Sans', sans-serif;
     background: url('../assets/bg/cloud.jpg') center center no-repeat;
     background-size: cover;
     margin: 0;}
+.statics {
+    justify-content: flex-start;
+    margin: 20px 0; /}
+.diskcontainer,
+.memorycontainer,
 .cpucontainer {
     box-shadow: 0 0 20px rgba(1, 57, 103, 0.25);
     border: 3px solid #0e4768b7; 
     text-align: center;
-    height: 250px;
-    width: 375px;
+    height: 220px;
+    width: 330px;
     font-family: 'Noto Sans', sans-serif;
-    background-color: #dedede75;
+    background-color: #dededec0;
+    margin-top: 25px;
+    margin-bottom: 30px;
     border-radius: 10px;}
-.cpuusage {
+.disk,
+.mem,
+.cpu {
     font-size: 20px;
-    color: #0e4768b7;
-}
+    color: #0b3249b7;}
+

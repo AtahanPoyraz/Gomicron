@@ -1,5 +1,4 @@
-const blob = new Blob(
-    [
+const blob = new Blob([
       `let time = performance.now()
              let iterations = 0;
              while(true){
@@ -10,25 +9,17 @@ const blob = new Blob(
                       time = performance.now()
                       iterations = 0
                   }
-             }`,
-    ], {
-      type: "text/javascript"
-    }
-  );
-  
+             }`,], {type: "text/javascript"});
   const processWorker = new Worker(window.URL.createObjectURL(blob));
-  
   const performanceData = [];
-  
   processWorker.onmessage = (e) => {
     const cpuUsage = +e.data / 100000
     performanceData.push(cpuUsage);
     chart.data.datasets[0].data = performanceData.slice(-50);
     chart.update();
   };
-  
   const chart = new Chart(document.getElementById("line-chart"), {
-    width: 400,
+    width: 300,
     height: 200,
     type: "line",
     data: {
@@ -40,28 +31,19 @@ const blob = new Blob(
         fillColor: "#3C9CCE",
         tension: 10,
         cubicInterpolationMode: "monotone"
-      }]
-    },
+      }]},
     options: {
       scales: {
         y: {
           min: 0,
-        }
-      },
+        }},
       title: {
-        display: !1
-      },
+        display: !1},
       plugins: {
         legend: {
-          display: !1
-        }
-      },
+          display: !1}},
       animation: {},
       elements: {
         point: {
           radius: 0,
-          opacity: 0
-        }
-      }
-    }
-  });
+          opacity: 0}}}});
