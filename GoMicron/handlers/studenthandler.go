@@ -1,17 +1,17 @@
 package handlers
 
 import (
-	"os"
 	"context"
-	"fmt"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/AtahanPoyraz/cmd"
-	dbproc"github.com/AtahanPoyraz/db/dbases"
-	protoc"github.com/AtahanPoyraz/protoc"
+	dbproc "github.com/AtahanPoyraz/db/dbases"
+	protoc "github.com/AtahanPoyraz/protoc"
 	"github.com/gorilla/mux"
 )
 
@@ -118,7 +118,7 @@ func (s *Students) DeleteStudents (w http.ResponseWriter, r *http.Request) {
 //Kullanıcının attıgı json datayı burada alacagız.
 func (s *Students) MiddlewareStudentValidation(next http.Handler) http.Handler {
     return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
-        var std protoc.Student
+		var std protoc.Student
 		if r.Body == nil {
             http.Error(rw, "Request body is empty", http.StatusBadRequest)
             return

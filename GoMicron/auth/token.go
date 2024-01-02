@@ -8,14 +8,6 @@ import (
 
 //---[ Generate Token ]-------------------------------------------------------------------------------------------------------------------------------//
 
-type Token struct {
-	AuthToken string
-}
-
-var (
-	globalToken *Token
-)
-
 func init() {
 	globalToken = generateToken()
 }

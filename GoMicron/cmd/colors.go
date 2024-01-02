@@ -16,6 +16,7 @@ const (
 //---[ BACKGROUND & TEXT COLOR ]-------------------------------------//
 
 	BYELLOW_BLACK = "\033[43;30m"
+	BBLACK_VIOLET = "\033[38;5;200m"
 	BRED_WHITE 	  = "\033[37;41m"
 	BBLUE_WHITE   = "\033[44;37m"
 	BGRAY_BLACK   = "\033[47;30m"

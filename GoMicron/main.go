@@ -33,8 +33,8 @@ func main() {
 	}
 
 //---[ PAGE ]-----------------------------------------------------------------------------------------------------------------------------------------//
-
 	r.PathPrefix("/css/").Handler(http.StripPrefix("/css/", http.FileServer(http.Dir("./templates/css/"))))
+	r.PathPrefix("/js/").Handler(http.StripPrefix("/js/", http.FileServer(http.Dir("./templates/js/"))))
 	r.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("./templates/assets/"))))
 
 	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -66,20 +66,28 @@ func main() {
 
 //---[ SERVICE PATHS ]---------------------------------------------------------------------------------------------------------------------------------//
 
-	SgetRouther := r.Methods(http.MethodGet).Subrouter()
-	SgetRouther.HandleFunc("/students/get/", sh.GetStudents)
+	//---[ SERVICE 1]---------------------------------------------------------------------------------------------------------------------------------//
+
+	SgetRouter := r.Methods(http.MethodGet).Subrouter()
+	SgetRouter.HandleFunc("/students/get/", sh.GetStudents)
+	SgetRouter.Use(auth.HandleAuthMiddleware)
 
 	SpostRouther := r.Methods(http.MethodPost).Subrouter()
 	SpostRouther.HandleFunc("/students/post/", sh.PostStudents)
+	SpostRouther.Use(auth.HandleAuthMiddleware)
 	SpostRouther.Use(sh.MiddlewareStudentValidation)
 
 	SputRouther := r.Methods(http.MethodPut).Subrouter()
 	SputRouther.HandleFunc("/students/put/{id:[0-9]+}", sh.PutStudents)
+	SputRouther.Use(auth.HandleAuthMiddleware)
 	SputRouther.Use(sh.MiddlewareStudentValidation)
 
 	SdeleteRouther := r.Methods(http.MethodDelete).Subrouter()
 	SdeleteRouther.HandleFunc("/students/delete/{id:[0-9]+}", sh.DeleteStudents)
+	SdeleteRouther.Use(auth.HandleAuthMiddleware)
 	SdeleteRouther.Use(sh.MiddlewareStudentValidation)
+
+	//---[ SERVICE 2]---------------------------------------------------------------------------------------------------------------------------------//
 
 	PgetRouther := r.Methods(http.MethodGet).Subrouter()
 	PgetRouther.HandleFunc("/products/get/", ph.GetProduct)
@@ -95,6 +103,8 @@ func main() {
 	PdeleteRouther := r.Methods(http.MethodDelete).Subrouter()
 	PdeleteRouther.HandleFunc("/products/delete/{id:[0-9]+}", ph.DeleteProduct)
 	PdeleteRouther.Use(ph.MiddlewareProductValidation)
+
+	//---[ SERVICE 3]---------------------------------------------------------------------------------------------------------------------------------//
 
 	LgetRouter := r.Methods(http.MethodGet).Subrouter()
 	LgetRouter.HandleFunc("/books/get/", lh.GetBooks)

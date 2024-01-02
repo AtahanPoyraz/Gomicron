@@ -1,15 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Gomicron UI</title>
-        <link rel="stylesheet" href="../css/dashboard.css">
-        <link rel="icon" href="../assets/logo/Gomicron.ico" type="image/x-icon">
-        <link rel="shortcut icon" href="../assets/logo/Gomicron.ico" type="image/x-icon">
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="icon" href="../assets/logo/Gomicron.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="../assets/logo/Gomicron.ico" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+</head>
 <body>
-    <div class="homecontainer">
+    <div class="statics">
+
+        <div class="cpucontainer">
+            <p class="cpuusage">CPU Performance</p>
+            <div style="height: 250px; width: 350px">
+                <canvas id="line-chart"></canvas>
+            </div>
+            <script src="../js/dashboard.js"></script>
+        </div>
     </div>
 </body>
 </html>

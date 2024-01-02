@@ -8,6 +8,10 @@ import (
 	"github.com/AtahanPoyraz/cmd"
 )
 
+//---[ USERS DB CONNECT ]----------------------------------------------------------------------------------------------------------------------------//
+
+
+
 //---[ USER AUTH ]-----------------------------------------------------------------------------------------------------------------------------------//
 
 type Credentials struct {
@@ -55,7 +59,7 @@ func (s *Server) AuthUser(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(response)
 
-		s.l.Printf("%s[AUTH]%s : Authentication successful for user: %s", cmd.BYELLOW_BLACK, cmd.TRESET, email)
+		s.l.Printf("%s[AUTH]%s : Authentication successful for user: %s", cmd.BBLACK_VIOLET, cmd.TRESET, email)
 		return
 	}
 

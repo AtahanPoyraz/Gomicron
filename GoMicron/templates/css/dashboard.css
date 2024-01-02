@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@700&family=Poppins:wght@400;500;600&display=swap');
-
 body {
     display: flex;
     justify-content: center;
@@ -9,22 +8,16 @@ body {
     background: url('../assets/bg/cloud.jpg') center center no-repeat;
     background-size: cover;
     margin: 0;}
-.homecontainer{
-    width: 1500px; /* Örnek değer, ihtiyacınıza göre ayarlayabilirsiniz */
-    height: 750px; /* Örnek değer, ihtiyacınıza göre ayarlayabilirsiniz */
-    border-radius: 20px;
-    background-color: rgba(224, 239, 251, 0.885);
-    box-shadow: 0 0 10px rgba(0, 66, 128, 0.268);
-    animation: fadeIn 1.5s;} 
-.doughnutChart {
-    width: 10px;
-    height: 10px;
+.cpucontainer {
+    box-shadow: 0 0 20px rgba(1, 57, 103, 0.25);
+    border: 3px solid #0e4768b7; 
+    text-align: center;
+    height: 250px;
+    width: 375px;
+    font-family: 'Noto Sans', sans-serif;
+    background-color: #dedede75;
+    border-radius: 10px;}
+.cpuusage {
+    font-size: 20px;
+    color: #0e4768b7;
 }
-@keyframes fadeIn{
-    from{
-        opacity: 0.1;
-        transform: translateY(-20px); 
-    }
-    to{
-        opacity: 1;
-        transform: translateY(0);}}
