@@ -9,10 +9,18 @@ import (
 	"github.com/AtahanPoyraz/cmd"
 	"github.com/AtahanPoyraz/config"
 	"github.com/AtahanPoyraz/db"
+	"github.com/dgrijalva/jwt-go"
+
+	protoc"github.com/AtahanPoyraz/protoc"
 
 	_ "github.com/lib/pq"
 	_ "github.com/go-sql-driver/mysql"
 )
+
+type Claims struct {
+	protoc.Users
+	jwt.StandardClaims
+   }
 
 type Server struct {
 	l *log.Logger
