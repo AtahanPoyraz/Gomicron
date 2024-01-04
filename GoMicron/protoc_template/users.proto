@@ -1,0 +1,10 @@
+syntax="proto3";
+
+option go_package = ".";
+
+message users {
+    int64 id = 1;
+    string email = 2;
+    string password = 3;
+    string token = 4;
+}

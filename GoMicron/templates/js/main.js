@@ -3,14 +3,12 @@ document.addEventListener("DOMContentLoaded", function() {
     var user_password = document.getElementById('password-input');
     var submit_button = document.getElementById('submit-button');
     var baseUrl = 'http://' + window.location.hostname + ':' + window.location.port;
-
     function submitForm() {
         event.preventDefault(); 
         var data = {
             email: user_email.value,
             password: user_password.value
         };
-
         fetch(baseUrl + '/gomicron/backend/user/auth/', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -31,16 +29,13 @@ document.addEventListener("DOMContentLoaded", function() {
             throw new Error("Authentication unsuccessful");
         });
     }
-
     submit_button.addEventListener("click", submitForm);
-
     user_email.addEventListener("keypress", function(event) {
         if (event.key === "Enter") {
             event.preventDefault();
             submitForm();
         }
     });
-
     user_password.addEventListener("keypress", function(event) {
         if (event.key === "Enter") {
             event.preventDefault();

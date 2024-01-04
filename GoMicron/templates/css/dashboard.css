@@ -30,4 +30,25 @@ body {
 .cpu {
     font-size: 20px;
     color: #0b3249b7;}
-
+.dashboard {
+    font-family: 'Noto Sans', sans-serif;
+    display: flex;
+    align-items: center; /* Dikey eksende ortala */
+    justify-content: space-between;
+    margin: 25px;
+}
+.panel {
+    box-shadow: 0 0 20px rgba(1, 57, 103, 0.25);
+    border: 3px solid #0e4768b7; 
+    margin-bottom: 4px;
+    width: 1348px;
+    height: 731.5px;
+    border-radius: 10px;
+    background-color: #dededec0;}
+.label {
+    font-size: 20px;
+    color: #0b3249b7;
+    font-family: 'Noto Sans', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center; }

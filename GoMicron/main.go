@@ -33,8 +33,10 @@ func main() {
 	}
 
 //---[ PAGE ]-----------------------------------------------------------------------------------------------------------------------------------------//
+
 	r.PathPrefix("/css/").Handler(http.StripPrefix("/css/", http.FileServer(http.Dir("./templates/css/"))))
 	r.PathPrefix("/js/").Handler(http.StripPrefix("/js/", http.FileServer(http.Dir("./templates/js/"))))
+	r.PathPrefix("/scripts/").Handler(http.StripPrefix("/scripts/", http.FileServer(http.Dir("./scripts/"))))
 	r.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("./templates/assets/"))))
 
 	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
