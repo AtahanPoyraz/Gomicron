@@ -2,7 +2,7 @@ version: "ALPHA 0.0.1"
 #------------[ SERVER ]------------#
 server:
   host         : "localhost"
-  port         : 4142
+  port         : 9876
   idletimeout  : 120
   readtimeout  : 1
   writetimeout : 1
@@ -26,7 +26,7 @@ cors:
 #-----------[ SERVICES ]------------#
 services:
   mysql:
-    db_hos       : "localhost"
+    db_host      : "localhost"
     db_port      : 3306
     db_user      : "db_user"
     db_pass      : "db_password"
@@ -35,7 +35,6 @@ services:
     db_name      : "LIBRARY"
     db_srvname   : "mysql"
 
-#----------[GOMICRON DB]------------#
   postgres:
     db_host    : "localhost"
     db_port    : 5432

@@ -33,7 +33,7 @@ body {
 .dashboard {
     font-family: 'Noto Sans', sans-serif;
     display: flex;
-    align-items: center; /* Dikey eksende ortala */
+    align-items: center;
     justify-content: space-between;
     margin: 25px;
 }
@@ -42,7 +42,7 @@ body {
     border: 3px solid #0e4768b7; 
     margin-bottom: 4px;
     width: 1348px;
-    height: 731.5px;
+    height: 732px;
     border-radius: 10px;
     background-color: #dededec0;}
 .label {
