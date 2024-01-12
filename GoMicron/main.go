@@ -1,30 +1,32 @@
 package main
 
 import (
-	"context"
+	"os"
 	"fmt"
 	"log"
-	"net/http"
-	"os"
-	"os/signal"
-	"syscall"
 	"time"
-
-	"github.com/AtahanPoyraz/auth"
+	"context"
+	"syscall"
+	"net/http"
+	"os/signal"
+	
 	"github.com/AtahanPoyraz/cmd"
+	"github.com/AtahanPoyraz/auth"
+	"github.com/AtahanPoyraz/router"
 	"github.com/AtahanPoyraz/config"
-	"github.com/AtahanPoyraz/handlers"
-
-	goHandlers "github.com/gorilla/handlers"
+	
 	"github.com/gorilla/mux"
+	goHandlers "github.com/gorilla/handlers"
 )
 
-//---[ STARTUP ]---------------------------------------------------------------------------------------------------------------------------------------//
+var (
+	r = mux.NewRouter()
+	l = log.New(os.Stdout, fmt.Sprintf("%sGOMICRON-API >> %s", cmd.TCYAN, cmd.TRESET), log.LstdFlags) 
+
+	srvh = auth.ServerHandler(l)
+)
 
 func main() {
-	r := mux.NewRouter()
-	l := log.New(os.Stdout, fmt.Sprintf("%sGOMICRON-API >> %s", cmd.TCYAN, cmd.TRESET), log.LstdFlags) 
-
 	config, err := config.ReadConfigFromFile("./config.yml")
 	
 	if err != nil {
@@ -32,8 +34,14 @@ func main() {
 		os.Exit(1)
 	}
 
-//---[ PAGE ]-----------------------------------------------------------------------------------------------------------------------------------------//
+	loadStaticFiles(r)
+	joinServerURL(r)
 
+	router.SetRoutes(r, l)
+	startServer(config, r, l)
+}
+
+func loadStaticFiles(r *mux.Router) {
 	r.PathPrefix("/css/").Handler(http.StripPrefix("/css/", http.FileServer(http.Dir("./templates/css/"))))
 	r.PathPrefix("/js/").Handler(http.StripPrefix("/js/", http.FileServer(http.Dir("./templates/js/"))))
 	r.PathPrefix("/scripts/").Handler(http.StripPrefix("/scripts/", http.FileServer(http.Dir("./scripts/"))))
@@ -42,89 +50,18 @@ func main() {
 	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./templates/html/main.html")
 	})
+}
 
-	// This route handles any path and applies the AuthMiddleware
+func joinServerURL(r *mux.Router) {
 	r.HandleFunc("/dashboard/", auth.AuthMiddleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./templates/html/dashboard.html")
 	})))
-	
-	// The generic path prefix route, should come after more specific routes
-	//r.PathPrefix("/{.*}").Handler(auth.AuthMiddleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-	//	http.ServeFile(w, r, "./templates/html/main.html")
-	//})))
-
-//---[ SERVER PATHS ]---------------------------------------------------------------------------------------------------------------------------------//
-	
-	srvh := auth.ServerHandler(l)
 
 	authRouter := r.Methods(http.MethodPost).Subrouter()
-	authRouter.HandleFunc("/gomicron/backend/user/auth/", srvh.AuthUser)
-	
-//---[ HANDLERS ]--------------------------------------------------------------------------------------------------------------------------------------//
+	authRouter.HandleFunc("/gomicron/backend/user/auth/", srvh.AuthUser)	
+}
 
-	sh := handlers.NewStudentHandler(l) 
-	ph := handlers.NewProductsHandler(l)   
-	lh := handlers.NewLibraryHandler(l)                                            
-
-//---[ SERVICE PATHS ]---------------------------------------------------------------------------------------------------------------------------------//
-
-	//---[ SERVICE 1]---------------------------------------------------------------------------------------------------------------------------------//
-
-	SgetRouter := r.Methods(http.MethodGet).Subrouter()
-	SgetRouter.HandleFunc("/students/get/", sh.GetStudents)
-	SgetRouter.Use(auth.HandleAuthMiddleware)
-
-	SpostRouther := r.Methods(http.MethodPost).Subrouter()
-	SpostRouther.HandleFunc("/students/post/", sh.PostStudents)
-	SpostRouther.Use(auth.HandleAuthMiddleware)
-	SpostRouther.Use(sh.MiddlewareStudentValidation)
-
-	SputRouther := r.Methods(http.MethodPut).Subrouter()
-	SputRouther.HandleFunc("/students/put/{id:[0-9]+}", sh.PutStudents)
-	SputRouther.Use(auth.HandleAuthMiddleware)
-	SputRouther.Use(sh.MiddlewareStudentValidation)
-
-	SdeleteRouther := r.Methods(http.MethodDelete).Subrouter()
-	SdeleteRouther.HandleFunc("/students/delete/{id:[0-9]+}", sh.DeleteStudents)
-	SdeleteRouther.Use(auth.HandleAuthMiddleware)
-	SdeleteRouther.Use(sh.MiddlewareStudentValidation)
-
-	//---[ SERVICE 2]---------------------------------------------------------------------------------------------------------------------------------//
-
-	PgetRouther := r.Methods(http.MethodGet).Subrouter()
-	PgetRouther.HandleFunc("/products/get/", ph.GetProduct)
-
-	PpostRouther := r.Methods(http.MethodPost).Subrouter()
-	PpostRouther.HandleFunc("/products/post/", ph.AddProduct)
-	PpostRouther.Use(ph.MiddlewareProductValidation)
-
-	PputRouther := r.Methods(http.MethodPut).Subrouter()
-	PputRouther.HandleFunc("/products/put/{id:[0-9]+}", ph.UpdateProduct)
-	PputRouther.Use(ph.MiddlewareProductValidation)
-
-	PdeleteRouther := r.Methods(http.MethodDelete).Subrouter()
-	PdeleteRouther.HandleFunc("/products/delete/{id:[0-9]+}", ph.DeleteProduct)
-	PdeleteRouther.Use(ph.MiddlewareProductValidation)
-
-	//---[ SERVICE 3]---------------------------------------------------------------------------------------------------------------------------------//
-
-	LgetRouter := r.Methods(http.MethodGet).Subrouter()
-	LgetRouter.HandleFunc("/books/get/", lh.GetBooks)
-
-	LpostRouther := r.Methods(http.MethodPost).Subrouter()
-	LpostRouther.HandleFunc("/books/post/", lh.PostBooks)
-	LpostRouther.Use(lh.MiddlewareBooksValidation)
-
-	LputRouther := r.Methods(http.MethodPut).Subrouter()
-	LputRouther.HandleFunc("/books/put/{id:[0-9]+}", lh.PutBooks)
-	LputRouther.Use(lh.MiddlewareBooksValidation)
-
-	LdeleteRouther := r.Methods(http.MethodDelete).Subrouter()
-	LdeleteRouther.HandleFunc("/books/delete/{id:[0-9]+}", lh.DeleteBooks)
-	LdeleteRouther.Use(lh.MiddlewareBooksValidation)
-
-//---[ SERVER CONFIGRATIONS & LOGGING ]-----------------------------------------------------------------------------------------------------------------//
-
+func startServer(config config.Config, r *mux.Router, l *log.Logger) {
 	cors := goHandlers.CORS(
 		goHandlers.AllowedOrigins(config.CORS.AllowedOrigins),
 		goHandlers.AllowedMethods(config.CORS.AllowedMethods),
@@ -163,5 +100,4 @@ func main() {
 	if err := server.Shutdown(tc); err != nil {
 		l.Fatalf("%s[INFO]%s : %serror during server shutdown: %v%s", cmd.BYELLOW_BLACK, cmd.TRESET, cmd.TRED ,err, cmd.TRESET)
 	}
-	
 }

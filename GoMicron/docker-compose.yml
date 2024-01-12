@@ -16,7 +16,7 @@ services:
     image: postgres:latest
     environment:
       - DB_USER=postgres
-      - DB_PASSWORD=password
+      - DB_PASSWORD=changeme
       - DB_NAME=postgres
     ports:
       - "5432:5432"
