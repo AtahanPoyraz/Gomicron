@@ -6,6 +6,7 @@ server:
   idletimeout  : 120
   readtimeout  : 1
   writetimeout : 1
+  checktimeout : 150
 
 #------------[ CORS ]---------------#
 cors:

@@ -1,41 +1,40 @@
 package main
 
 import (
-	"os"
+	"context"
 	"fmt"
 	"log"
-	"time"
-	"context"
-	"syscall"
 	"net/http"
+	"os"
 	"os/signal"
-	
-	"github.com/AtahanPoyraz/cmd"
+	"syscall"
+	"time"
+
 	"github.com/AtahanPoyraz/auth"
-	"github.com/AtahanPoyraz/router"
+	"github.com/AtahanPoyraz/cmd"
 	"github.com/AtahanPoyraz/config"
-	
+	"github.com/AtahanPoyraz/api"
+	"github.com/AtahanPoyraz/router"
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
-	goHandlers "github.com/gorilla/handlers"
 )
 
 var (
-	r = mux.NewRouter()
-	l = log.New(os.Stdout, fmt.Sprintf("%sGOMICRON-API >> %s", cmd.TCYAN, cmd.TRESET), log.LstdFlags) 
-
+	r    = mux.NewRouter()
+	l    = log.New(os.Stdout, fmt.Sprintf("%sGOMICRON-API >> %s", cmd.TCYAN, cmd.TRESET), log.LstdFlags)
 	srvh = auth.ServerHandler(l)
 )
 
 func main() {
 	config, err := config.ReadConfigFromFile("./config.yml")
-	
+
 	if err != nil {
-		l.Printf("%s[ERROR]%s : Read operation failed please check file : (%e)", cmd.BRED_WHITE, cmd.TRESET, err)
+		l.Printf("%s[ERROR]%s : Read operation failed, please check file : (%v)", cmd.BRED_WHITE, cmd.TRESET, err)
 		os.Exit(1)
 	}
 
 	loadStaticFiles(r)
-	joinServerURL(r)
+	joinServerURL(r, config)
 
 	router.SetRoutes(r, l)
 	startServer(config, r, l)
@@ -48,7 +47,7 @@ func loadStaticFiles(r *mux.Router) {
 	r.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("./templates/assets/"))))
 }
 
-func joinServerURL(r *mux.Router) {
+func joinServerURL(r *mux.Router, config config.Config) {
 	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "./templates/html/main.html")
 	})
@@ -57,14 +56,14 @@ func joinServerURL(r *mux.Router) {
 	})))
 
 	authRouter := r.Methods(http.MethodPost).Subrouter()
-	authRouter.HandleFunc("/gomicron/backend/user/auth/", srvh.AuthUser)	
+	authRouter.HandleFunc("/gomicron/backend/user/auth/", srvh.AuthUser)
 }
 
 func startServer(config config.Config, r *mux.Router, l *log.Logger) {
-	cors := goHandlers.CORS(
-		goHandlers.AllowedOrigins(config.CORS.AllowedOrigins),
-		goHandlers.AllowedMethods(config.CORS.AllowedMethods),
-		goHandlers.AllowedHeaders(config.CORS.AllowedHeaders),
+	cors := handlers.CORS(
+		handlers.AllowedOrigins(config.CORS.AllowedOrigins),
+		handlers.AllowedMethods(config.CORS.AllowedMethods),
+		handlers.AllowedHeaders(config.CORS.AllowedHeaders),
 	)
 
 	server := &http.Server{
@@ -75,12 +74,26 @@ func startServer(config config.Config, r *mux.Router, l *log.Logger) {
 		WriteTimeout: time.Duration(config.Server.WriteTimeout) * time.Second,
 	}
 
-	l.Printf("%s[INFO]%s : %sServer Starting at %s:%d%s", cmd.BYELLOW_BLACK, cmd.TRESET, cmd.TVIOLET, config.Server.Host , config.Server.Port, cmd.TRESET)
+	l.Printf("%s[INFO]%s : %sServer Starting at %s:%d%s", cmd.BYELLOW_BLACK, cmd.TRESET, cmd.TVIOLET, config.Server.Host, config.Server.Port, cmd.TRESET)
 
 	go func() {
 		err := server.ListenAndServe()
 		if err != nil && err != http.ErrServerClosed {
 			l.Fatal(err)
+		}
+	}()
+
+	go func() {
+		ticker := time.Tick(time.Duration(config.Server.CheckTimeout) * time.Second)
+
+		for {
+			select {
+			case <-ticker:
+				_, err := api.Return_Server_Stats()
+				if err != nil {
+					l.Fatal(err)
+				}
+			}
 		}
 	}()
 
@@ -93,10 +106,9 @@ func startServer(config config.Config, r *mux.Router, l *log.Logger) {
 	l.Printf("%s[INFO]%s : %sReceived terminate signal, graceful shutdown %v\n %s", cmd.BYELLOW_BLACK, cmd.TRESET, cmd.TRED, sig, cmd.TRESET)
 
 	tc, cancel := context.WithTimeout(context.Background(), 30*time.Second)
-
 	defer cancel()
 
 	if err := server.Shutdown(tc); err != nil {
-		l.Fatalf("%s[INFO]%s : %serror during server shutdown: %v%s", cmd.BYELLOW_BLACK, cmd.TRESET, cmd.TRED ,err, cmd.TRESET)
+		l.Fatalf("%s[INFO]%s : %serror during server shutdown: %v%s", cmd.BYELLOW_BLACK, cmd.TRESET, cmd.TRED, err, cmd.TRESET)
 	}
 }

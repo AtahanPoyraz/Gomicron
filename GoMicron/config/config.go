@@ -13,6 +13,7 @@ type ServerConfig struct {
 	IdleTimeout  int 	`yaml:"idletimeout"`
 	ReadTimeout  int 	`yaml:"readtimeout"`
 	WriteTimeout int 	`yaml:"writetimeout"`
+	CheckTimeout int    `yaml:"checktimeout"`
 }
 
 //---[ CORS SETTINGS ]------------------------------------------------------------------------------------------------------------------------------//

@@ -1,3 +1,19 @@
+// +build !exclude
+// Package router provides API routes.
+//
+// Documentation for router
+//
+// Schemes: http, https
+// BasePath: /
+// Version: 1.0.0
+//
+// Consumes:
+// - application/json
+//
+// Produces:
+// - application/json
+// swagger:meta
+
 package router
 
 import (
