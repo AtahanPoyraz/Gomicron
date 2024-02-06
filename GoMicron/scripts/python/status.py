@@ -15,7 +15,7 @@ class PerformanceStats:
 
     @staticmethod
     def CPU_Usage() -> float:
-        cpu_percent = ps.cpu_percent(1.5)
+        cpu_percent = ps.cpu_percent(0)
         return cpu_percent
 
     @staticmethod

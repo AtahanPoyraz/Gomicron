@@ -10,11 +10,12 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/AtahanPoyraz/api"
 	"github.com/AtahanPoyraz/auth"
 	"github.com/AtahanPoyraz/cmd"
 	"github.com/AtahanPoyraz/config"
-	"github.com/AtahanPoyraz/api"
 	"github.com/AtahanPoyraz/router"
+	scripts "github.com/AtahanPoyraz/scripts/go"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
@@ -57,6 +58,10 @@ func joinServerURL(r *mux.Router, config config.Config) {
 
 	authRouter := r.Methods(http.MethodPost).Subrouter()
 	authRouter.HandleFunc("/gomicron/backend/user/auth/", srvh.AuthUser)
+
+    statsRouter := r.Methods(http.MethodGet).Subrouter()
+    statsRouter.HandleFunc("/gomicron/server/stats/", api.ServerAPI)
+    statsRouter.Use(auth.HandleAuthMiddleware)
 }
 
 func startServer(config config.Config, r *mux.Router, l *log.Logger) {
@@ -89,10 +94,7 @@ func startServer(config config.Config, r *mux.Router, l *log.Logger) {
 		for {
 			select {
 			case <-ticker:
-				_, err := api.Return_Server_Stats()
-				if err != nil {
-					l.Fatal(err)
-				}
+				scripts.ServerStatus()
 			}
 		}
 	}()
