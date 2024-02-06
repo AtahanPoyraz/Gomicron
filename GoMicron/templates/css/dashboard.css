@@ -41,7 +41,7 @@ body {
     box-shadow: 0 0 20px rgba(1, 57, 103, 0.25);
     border: 3px solid #0e4768b7; 
     margin-bottom: 4px;
-    width: 1348px;
+    width: 1523px;
     height: 732px;
     border-radius: 10px;
     background-color: #dededec0;}
@@ -52,3 +52,13 @@ body {
     display: flex;
     justify-content: center;
     align-items: center; }
+.updateInterval {
+    width: 30px;
+    border-radius: 3px;
+    color: #000000b7;
+    border: 3px solid #0e4768b7; 
+    font-weight: 700;}
+.timelabel {
+    font-family: 'Noto Sans', sans-serif;
+    margin-left: 10px;
+    color: #0b3249b7;}

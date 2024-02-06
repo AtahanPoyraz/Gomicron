@@ -61,7 +61,7 @@ func joinServerURL(r *mux.Router, config config.Config) {
 
     statsRouter := r.Methods(http.MethodGet).Subrouter()
     statsRouter.HandleFunc("/gomicron/server/stats/", api.ServerAPI)
-    statsRouter.Use(auth.HandleAuthMiddleware)
+    //statsRouter.Use(auth.HandleAuthMiddleware)
 }
 
 func startServer(config config.Config, r *mux.Router, l *log.Logger) {
