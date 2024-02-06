@@ -4,11 +4,6 @@ package auth
 import (
 	"encoding/base64"
 	"math/rand"
-	"time"
-
-	protoc"github.com/AtahanPoyraz/protoc"
-
-	"github.com/dgrijalva/jwt-go"
 )
 
 //---[ Generate Token ]-------------------------------------------------------------------------------------------------------------------------------//
@@ -34,29 +29,4 @@ func generateToken() *Token {
 	return &Token{
 		AuthToken: token,
 	}
-}
-
-func GenerateJWTToken(id int, email, password string) (*Token, error) {
-	expirationTime := time.Now().Add(30 * time.Minute)
-	var jwtKey = []byte("my_secret_key")
-	claims := &Claims{
-		Users: protoc.Users{
-            Id:       int64(id),
-            Email:    email,
-            Password: password,
-        },
-		StandardClaims: jwt.StandardClaims{
-	  		ExpiresAt: expirationTime.Unix(),
-	 },
-	}
-   token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	
-	tokenString, err := token.SignedString(jwtKey)
-	if err != nil {
-	 return nil, err
-	}
-
-    return &Token{
-		AuthToken: tokenString,
-	}, nil
 }

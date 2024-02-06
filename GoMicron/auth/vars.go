@@ -9,7 +9,6 @@ import (
 	"github.com/AtahanPoyraz/cmd"
 	"github.com/AtahanPoyraz/config"
 	"github.com/AtahanPoyraz/db"
-	"github.com/dgrijalva/jwt-go"
 
 	protoc"github.com/AtahanPoyraz/protoc"
 
@@ -19,7 +18,6 @@ import (
 
 type Claims struct {
 	protoc.Users
-	jwt.StandardClaims
    }
 
 type Server struct {
